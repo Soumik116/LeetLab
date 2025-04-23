@@ -165,7 +165,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://postgres:mysecurepassword@localhost:5432/postgres"
+        "value": "postgresql://soumik:password123@localhost:5432/leetlab"
       }
     }
   },
