@@ -49,3 +49,30 @@ export const authMiddleware = async (req, res, next) => {
     });
   }
 };
+
+export const checkAdmin = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        role: true,
+      },
+    });
+
+    if (!user || user !== "ADMIN") {
+      return res.status(403).json({
+        message: "Access denied - Admins only ",
+      });
+    }
+
+    next();
+  } catch (error) {
+    console.error("Error cheacking Admin role", error);
+    res.status(500).json({
+      message: "Error cheaking Admin role",
+    });
+  }
+};
