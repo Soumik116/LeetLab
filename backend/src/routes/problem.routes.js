@@ -1,10 +1,10 @@
 import express from "express";
 import { authMiddleware, checkAdmin } from "../middleware/auth.middleware.js";
-import { createproblem, deleteProblem, getAllProblems, getAllSolvedProblemsByUser, getProblemById, updateProblem } from "../controllers/problem.controller.js";
+import { createProblem, deleteProblem, getAllProblems, getAllSolvedProblemsByUser, getProblemById, updateProblem } from "../controllers/problem.controller.js";
 
 const problemRoutes = express.Router();
 
-problemRoutes.post("/create-problem", authMiddleware, checkAdmin, createproblem)
+problemRoutes.post("/create-problem", authMiddleware, checkAdmin, createProblem)
 
 problemRoutes.get("/get-all-problems", authMiddleware, getAllProblems)
 

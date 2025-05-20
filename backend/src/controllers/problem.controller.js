@@ -1,7 +1,11 @@
-import db from "../libs/db.js";
-import { getJudge0LanguageId } from "../libs/judge0.libs.js";
+import { db } from "../libs/db.js";
+import {
+  getJudge0LanguageId,
+  poolBatchResult,
+  submitBatch,
+} from "../libs/judge0.libs.js";
 
-export const createproblem = async (req, res) => {
+export const createProblem = async (req, res) => {
   // going get all the data from the request body
   const {
     title,
@@ -40,7 +44,39 @@ export const createproblem = async (req, res) => {
         expected_output: output,
       }));
 
-      const submissionsResults = await submissionsBatch(submissions);
+      const submissionsResults = await submitBatch(submissions);
+      const token = submissionsResults.map((res) => res.token);
+      const results = await poolBatchResult(token);
+
+      for (let i = 0; i < results.length; i++) {
+        const result = results[i];
+        console.log("result :", result);
+
+        // console.log(`Testcase ${i + 1} and language ${language} --- result ${JSON.stringify(result.status.description)}`);
+
+        if (result.status.id !== 3) {
+          return res.status(400).json({
+            error: `Testcase ${i + 1} faild for language ${language}`,
+          });
+        }
+      }
+
+      // save the problem to database
+
+      const newProblem = await db.problem.create({
+        data: {
+          title,
+          description,
+          difficulty,
+          tags,
+          examples,
+          constraints,
+          testCases,
+          referenceSolutions,
+          userId: req.user.id,
+        },
+      });
+      return res.status(201).json(newProblem);
     }
   } catch (error) {}
 };
