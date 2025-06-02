@@ -14,13 +14,13 @@ export const createProblem = async (req, res) => {
     tags,
     examples,
     constraints,
-    testCases,
+    testcases,
     referenceSolutions,
   } = req.body;
 
   // going check user role once again
   if (req.user.role !== "ADMIN") {
-    res.status(403).json({
+    return res.status(403).json({
       error: "You are not allowed to create a problem",
     });
   }
@@ -37,7 +37,7 @@ export const createProblem = async (req, res) => {
         });
       }
 
-      const submissions = testCases.map(([input, output]) => ({
+      const submissions = testcases.map(({input, output}) => ({
         source_code: solutionCode,
         language_id: languageId,
         stdIn: input,
@@ -71,14 +71,19 @@ export const createProblem = async (req, res) => {
           tags,
           examples,
           constraints,
-          testCases,
+          testcases,
           referenceSolutions,
           userId: req.user.id,
         },
       });
       return res.status(201).json(newProblem);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: "Error While Creating Problem",
+    });
+  }
 };
 
 export const getAllProblems = async (req, res) => {};

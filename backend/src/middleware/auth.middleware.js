@@ -62,7 +62,7 @@ export const checkAdmin = async (req, res, next) => {
       },
     });
 
-    if (!user || user !== "ADMIN") {
+    if (!user || user.role !== "ADMIN") {
       return res.status(403).json({
         message: "Access denied - Admins only ",
       });
@@ -70,9 +70,9 @@ export const checkAdmin = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error("Error cheacking Admin role", error);
+    console.error("Error checking Admin role", error);
     res.status(500).json({
-      message: "Error cheaking Admin role",
+      message: "Error checking Admin role",
     });
   }
 };
