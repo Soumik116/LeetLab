@@ -1,7 +1,7 @@
 import { db } from "../libs/db.js";
 import {
   getJudge0LanguageId,
-  poolBatchResult,
+  pollBatchResults,
   submitBatch,
 } from "../libs/judge0.libs.js";
 
@@ -15,6 +15,7 @@ export const createProblem = async (req, res) => {
     examples,
     constraints,
     testcases,
+    codeSnippets,
     referenceSolutions,
   } = req.body;
 
@@ -31,22 +32,23 @@ export const createProblem = async (req, res) => {
     for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
       const languageId = getJudge0LanguageId(language);
 
-      if (!language) {
-        res.status(400).json({
+      if (!languageId) {
+        return res.status(400).json({
           error: `Language ${language} is not supported`,
         });
       }
 
-      const submissions = testcases.map(({input, output}) => ({
+      const submissions = testcases.map(({ input, output }) => ({
         source_code: solutionCode,
         language_id: languageId,
-        stdIn: input,
+        stdin: input,
         expected_output: output,
       }));
 
       const submissionsResults = await submitBatch(submissions);
       const token = submissionsResults.map((res) => res.token);
-      const results = await poolBatchResult(token);
+
+      const results = await pollBatchResults(token);
 
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
@@ -60,24 +62,29 @@ export const createProblem = async (req, res) => {
           });
         }
       }
-
-      // save the problem to database
-
-      const newProblem = await db.problem.create({
-        data: {
-          title,
-          description,
-          difficulty,
-          tags,
-          examples,
-          constraints,
-          testcases,
-          referenceSolutions,
-          userId: req.user.id,
-        },
-      });
-      return res.status(201).json(newProblem);
     }
+
+    // save the problem to database
+
+    const newProblem = await db.problem.create({
+      data: {
+        title,
+        description,
+        difficulty,
+        tags,
+        examples,
+        constraints,
+        testcases,
+        codeSnippets,
+        referenceSolutions,
+        userId: req.user.id,
+      },
+    });
+    return res.status(201).json({
+      success: true,
+      message: "Message Created Successfully",
+      problem: newProblem,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({

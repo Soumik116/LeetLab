@@ -1,16 +1,16 @@
 import axios from "axios";
 export const getJudge0LanguageId = (language) => {
   const languageMap = {
-    PYTHON: 71,
-    JAVASCRIPT: 63,
-    JAVA: 62,
+    "PYTHON":71,
+    "JAVA":62,
+    "JAVASCRIPT":63,
   };
   return languageMap[language.toUpperCase()];
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export const poolBatchResult = async (token) => {
+export const pollBatchResult = async (token) => {
   while (true) {
     const { data } = await axios.get(
       `${process.env.JUDGE0_API_URL}/submissions/batch`, {
@@ -35,7 +35,7 @@ export const submitBatch = async (submissions) => {
   const { data } = await axios.post(
     `${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,
     {
-      submissions,
+      submissions
     }
   );
 
