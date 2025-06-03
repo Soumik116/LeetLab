@@ -66,7 +66,8 @@ export const createProblem = async (req, res) => {
 
     // save the problem to database
 
-    const newProblem = await db.problem.create({
+    const newProblem = 
+    await db.problem.create({
       data: {
         title,
         description,
@@ -88,7 +89,7 @@ export const createProblem = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      error: "Error While Creating Problem",
+      error: "Error While Creating Problem",error
     });
   }
 };

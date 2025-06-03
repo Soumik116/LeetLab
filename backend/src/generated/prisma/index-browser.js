@@ -139,11 +139,11 @@ exports.Prisma.ProblemScalarFieldEnum = {
   constraints: 'constraints',
   hints: 'hints',
   editorial: 'editorial',
-  testCases: 'testCases',
+  testcases: 'testcases',
   codeSnippets: 'codeSnippets',
-  referenceSolutions: 'referenceSolutions',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  referenceSolutions: 'referenceSolutions'
 };
 
 exports.Prisma.SortOrder = {

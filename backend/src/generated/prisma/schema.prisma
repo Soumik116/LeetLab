@@ -50,7 +50,7 @@ model problem {
   hints       String?
   editorial   String?
 
-  testCases          Json
+  testcases          Json
   codeSnippets       Json
   referenceSolutions Json
 
