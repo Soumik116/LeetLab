@@ -10,7 +10,7 @@ export const getJudge0LanguageId = (language) => {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export const pollBatchResult = async (token) => {
+export const pollBatchResults = async (token) => {
   while (true) {
     const { data } = await axios.get(
       `${process.env.JUDGE0_API_URL}/submissions/batch`, {
