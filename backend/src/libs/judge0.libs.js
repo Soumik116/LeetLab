@@ -11,7 +11,7 @@ export const getJudge0LanguageId = (language) => {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const pollBatchResults = async (tokens)=>{
-  console.log("Polling for results")
+  // console.log("Polling for results")
   console.log(tokens)
     while(true){
         
@@ -34,7 +34,7 @@ export const pollBatchResults = async (tokens)=>{
 }
 
 export const submitBatch = async (submissions) => {
-  console.log("Submitting batch")
+  // console.log("Submitting batch")
   const { data } = await axios.post(
     `${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,
     {

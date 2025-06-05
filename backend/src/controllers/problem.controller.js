@@ -66,8 +66,7 @@ export const createProblem = async (req, res) => {
 
     // save the problem to database
 
-    const newProblem = 
-    await db.problem.create({
+    const newProblem = await db.problem.create({
       data: {
         title,
         description,
@@ -89,16 +88,115 @@ export const createProblem = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      error: "Error While Creating Problem",error
+      error: "Error While Creating Problem",
+      error,
     });
   }
 };
 
-export const getAllProblems = async (req, res) => {};
+export const getAllProblems = async (req, res) => {
+  try {
+    const problems = await db.problem.findMany();
 
-export const getProblemById = async (req, res) => {};
+    if (!problems) {
+      return res.status(404).json({
+        error: "No problems found",
+      });
+    }
+    return res.status(201).json({
+      success: true,
+      message: "Message Fetched Successfully",
+      problems,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: "Error While Fetching Problem",
+      error,
+    });
+  }
+};
 
-export const updateProblem = async (req, res) => {};
+export const getProblemById = async (req, res) => {
+ const { id } = req.params;
+
+  try {
+    const problem = await db.problem.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!problem) {
+      return res.status(404).json({
+        error: "No problem found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Message Fetched Successfully",
+      problem,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: "Error While Fetching Problem",
+      error,
+    });
+  }
+};
+
+export const updateProblem = async (req, res) => {
+  const { id } = req.params;
+
+  const {
+    title,
+    description,
+    difficulty,
+    tags,
+    examples,
+    constraints,
+    testcases,
+    codeSnippets,
+    referenceSolutions,
+  } = req.body;
+
+  try {
+    const problem = await db.problem.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        description,
+        difficulty,
+        tags,
+        examples,
+        constraints,
+        testcases,
+        codeSnippets,
+        referenceSolutions,
+      },
+    });
+
+    if (!problem) {
+      return res.status(404).json({
+        error: "No problem found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Message Fetched Successfully",
+      problem,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: "Error While Fetching Problem",
+      error,
+    });
+  }
+};
 
 export const deleteProblem = async (req, res) => {};
 
