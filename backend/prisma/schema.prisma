@@ -58,6 +58,7 @@ model problem {
   problemSolved      ProblemSolved[]
 }
 
+
 model Submission {
   id            String  @id @default(uuid())
   userId        String
